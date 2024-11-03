@@ -1,14 +1,16 @@
-// src/App.js
 import React, { useState } from 'react';
-import StudentApp from './StudentApp';
 import AdminApp from './AdminApp';
 import Login from './components/Login/Login';
+import StaffApp from './StaffApp';
+import StudentApp from './StudentApp';
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(null); // null until login
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [role, setRole] = useState(null);
 
-  const handleLogin = (isAdmin) => {
+  const handleLogin = (isAdmin, role) => {
     setIsAdmin(isAdmin);
+    setRole(role);
   };
 
   return (
@@ -17,8 +19,10 @@ const App = () => {
         <Login onLogin={handleLogin} />
       ) : isAdmin ? (
         <AdminApp />
-      ) : (
+      ) : role === 'student' ? (
         <StudentApp />
+      ) : (
+        <StaffApp />
       )}
     </div>
   );

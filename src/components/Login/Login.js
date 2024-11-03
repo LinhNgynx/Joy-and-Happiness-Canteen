@@ -9,10 +9,12 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Simple credential check (replace with your authentication logic)
-    if (username === 'admin' && password === 'admin') {
-      onLogin(true); // isAdmin = true
-    } else if (username === 'student' && password === 'student') {
-      onLogin(false); // isAdmin = false
+    if (username === 'admin' && password === 'admin' && role === 'admin') {
+      onLogin(true, 'admin'); // isAdmin = true, role = 'admin'
+    } else if (username === 'staff' && password === 'staff' && role === 'staff') {
+      onLogin(false, 'staff'); // isAdmin = false, role = 'staff'
+    } else if (username === 'student' && password === 'student' && role === 'student') {
+      onLogin(false, 'student'); // isAdmin = false, role = 'student'
     } else {
       alert('Invalid credentials');
     }
@@ -62,6 +64,7 @@ const Login = ({ onLogin }) => {
                 Role:
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                   <option value="student">Student</option>
+                  <option value="staff">Staff</option>
                   <option value="admin">Admin</option>
                 </select>
               </label>

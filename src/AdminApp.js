@@ -1,11 +1,10 @@
-
 // src/AdminApp.js
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AdminNavbar from './components/AdminUI/AdminNavBar';
 import Dashboard from './components/AdminUI/Dashboard';
-import Users from './components/AdminUI/Users';
 import Orders from './components/AdminUI/Orders';
 import Settings from './components/AdminUI/Settings';
+import Users from './components/AdminUI/Users';
 
 const AdminApp = () => {
   return (
