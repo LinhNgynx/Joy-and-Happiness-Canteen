@@ -5,19 +5,17 @@ import StaffApp from './StaffApp';
 import StudentApp from './StudentApp';
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(null);
   const [role, setRole] = useState(null);
 
-  const handleLogin = (isAdmin, role) => {
-    setIsAdmin(isAdmin);
+  const handleLogin = (role) => {
     setRole(role);
   };
 
   return (
     <div>
-      {isAdmin === null ? (
+      {role === null ? (
         <Login onLogin={handleLogin} />
-      ) : isAdmin ? (
+      ) : role === 'admin' ? (
         <AdminApp />
       ) : role === 'student' ? (
         <StudentApp />

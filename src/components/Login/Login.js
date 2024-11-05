@@ -5,20 +5,25 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // default role
+  console.log('hehe ');    
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simple credential check (replace with your authentication logic)
+    //Simple credential check (replace with your authentication logic)
     if (username === 'admin' && password === 'admin' && role === 'admin') {
-      onLogin(true, 'admin'); // isAdmin = true, role = 'admin'
+      onLogin('admin'); // role = 'admin'
     } else if (username === 'staff' && password === 'staff' && role === 'staff') {
-      onLogin(false, 'staff'); // isAdmin = false, role = 'staff'
+      onLogin('staff'); // role = 'staff'
     } else if (username === 'student' && password === 'student' && role === 'student') {
-      onLogin(false, 'student'); // isAdmin = false, role = 'student'
+      onLogin('student'); // role = 'student'
     } else {
       alert('Invalid credentials');
     }
   };
+
+  
 
   return (
     <div
@@ -28,7 +33,7 @@ const Login = ({ onLogin }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: `url('./image/banner.png')`, // Update the path to your image
+        backgroundImage: `url('../image/banner.png')`, // Update the path to your image
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
