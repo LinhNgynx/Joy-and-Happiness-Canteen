@@ -271,21 +271,6 @@ h2 {
     margin: 0;
 }
 
-.blue-btn {
-    padding: 8px 20px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    text-align: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-}
-
-.blue-btn:hover {
-    background-color: #0056b3;
-}
 
 .card-icon {
     font-size: 24px;
