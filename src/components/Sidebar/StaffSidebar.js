@@ -2,14 +2,16 @@ import React from 'react';
 import { Tooltip } from 'react-tooltip';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import { useAuth } from '../../context/AuthContext';
 
 const StaffSidebar = () => {
+    const { logout } = useAuth();
     const navigate = useNavigate(); // Initialize useNavigate
     const handleNavigation = (path) => {
         navigate(path); // Programmatically navigate to the specified path
     };
     return (
-        <nav className="navbar-left" style={{ backgroundColor: '#27A4F2' }}>
+        <nav className="navbar-left" style={{ backgroundColor: '#1C004D' }}>
             <ul className="nav-list">
                 <li>
                     <button onClick={() => handleNavigation("/staff/menu")}>
@@ -37,7 +39,10 @@ const StaffSidebar = () => {
                     <Tooltip anchorSelect="#wallet" place="top"> Student Wallets </Tooltip>
                 </li>
                 <li>
-                    <button onClick={() => handleNavigation("/logout")}>
+                    <button onClick={() => {
+                       handleNavigation("/");
+                       logout();
+                    }}>
                         <i id="logout" className="fas fa-sign-out-alt"></i>
                     </button>
                     <Tooltip anchorSelect="#logout" place="top"> Log Out </Tooltip>

@@ -13,6 +13,7 @@ import ShippingPolicy from './components/StudentUI/ShippingPolicy';
 import AdminSidebar from './components/Sidebar/AdminSidebar';
 import AdminFooter from './components/Footer/AdminFooter';
 import Header from './components/Header/Header';
+import IncomeStatistics from './components/AdminUI/IncomeStatistics';
 import "./AdminApp.css";
 const AdminApp = () => {
   return (
@@ -31,6 +32,7 @@ const AdminApp = () => {
             <Route path="/admin/manage-coupon" element={<ManageCoupon />} />
             <Route path="/admin/manage-order" element={<ManageOrder />} />
             <Route path="/admin/wallet" element={<ManageOrder />} />
+            <Route path="/admin/statistics" element={<IncomeStatistics />} />
             {/* Add additional routes as needed */}
             <Route path="/admin/member-list" element={<MemberList />} />
             <Route path="/admin/brand-story" element={<BrandStory />} />

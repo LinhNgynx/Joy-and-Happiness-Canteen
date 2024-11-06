@@ -53,6 +53,17 @@ export const students = [
         { id: 2, items: "Fruit Smoothie, Granola", totalAmount: 5.99, paymentMethod: "Cash", date: "10-05-2024" },
         { id: 3, items: "Nachos, Salsa", totalAmount: 8.49, paymentMethod: "Debit Card", date: "10-06-2024" }
       ]
+    },
+    {
+      id: 6,
+      name: "Jenifer Lopez",
+      email: "jenifer.lopez@domain.com",
+      role: "Student",
+      orderHistory: [
+        { id: 1, items: "Pancakes, Syrup", totalAmount: 7.99, paymentMethod: "Credit Card", date: "10-14-2024" },
+        { id: 2, items: "Fruit Smoothie, Granola", totalAmount: 5.99, paymentMethod: "Cash", date: "06-05-2024" },
+        { id: 3, items: "Nachos, Salsa", totalAmount: 8.49, paymentMethod: "Debit Card", date: "05-06-2024" }
+      ]
     }
   ];
   

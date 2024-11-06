@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // default role
-  console.log('hehe ');    
-
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //Simple credential check (replace with your authentication logic)
     if (username === 'admin' && password === 'admin' && role === 'admin') {
-      onLogin('admin'); // role = 'admin'
+      login('admin');
     } else if (username === 'staff' && password === 'staff' && role === 'staff') {
-      onLogin('staff'); // role = 'staff'
+      login('staff');
     } else if (username === 'student' && password === 'student' && role === 'student') {
-      onLogin('student'); // role = 'student'
+      login('student');
     } else {
       alert('Invalid credentials');
     }

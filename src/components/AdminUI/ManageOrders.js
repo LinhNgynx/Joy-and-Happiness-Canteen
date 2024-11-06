@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { staff as staffDB } from "../../db/staffUser";
 import { students as studentsDB } from "../../db/studentUser";
 const ManageOrder = () => {
@@ -12,6 +13,10 @@ const ManageOrder = () => {
   const [endDate, setEndDate] = useState("");
   const [oldOrders, setOldOrders] = useState([]);
   const [isOldOrdersModalOpen, setIsOldOrdersModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const handleNavigation = (path) => {
+    navigate(path); // Programmatically navigate to the specified path
+  };
 
   const handleStaffClick = (staff) => {
     setSelectedStaff(staff);
@@ -51,17 +56,17 @@ const ManageOrder = () => {
   // Filter order history based on search term and date range
   const filteredOrderHistory = selectedStaff
     ? selectedStaff.orderHistory.filter((purchase) => {
-      const matchesSearch = purchase.items
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const matchesStartDate = startDate
-        ? new Date(purchase.date) >= new Date(startDate)
-        : true;
-      const matchesEndDate = endDate
-        ? new Date(purchase.date) <= new Date(endDate)
-        : true;
-      return matchesSearch && matchesStartDate && matchesEndDate;
-    })
+        const matchesSearch = purchase.items
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+        const matchesStartDate = startDate
+          ? new Date(purchase.date) >= new Date(startDate)
+          : true;
+        const matchesEndDate = endDate
+          ? new Date(purchase.date) <= new Date(endDate)
+          : true;
+        return matchesSearch && matchesStartDate && matchesEndDate;
+      })
     : [];
   const fetchOldOrders = () => {
     const sixMonthsAgo = new Date();
@@ -86,11 +91,11 @@ const ManageOrder = () => {
       prevUsers.map((staff) =>
         staff.id === staffId
           ? {
-            ...staff,
-            orderHistory: staff.orderHistory.filter(
-              (order) => order.id !== orderId
-            ),
-          }
+              ...staff,
+              orderHistory: staff.orderHistory.filter(
+                (order) => order.id !== orderId
+              ),
+            }
           : staff
       )
     );
@@ -102,6 +107,24 @@ const ManageOrder = () => {
   return (
     <div className="user-management-page">
       <h2 style={{ textAlign: "center" }}>Order History</h2>
+      <div
+        style={{
+          display: "flex",
+          marginLeft: "50px",
+          marginRight: "50px",
+          justifyContent: "space-between",
+        }}
+      >
+        <button onClick={fetchOldOrders} className="btn blue-btn">
+          Show Orders Older Than 6 Months
+        </button>
+        <button
+          onClick={() => handleNavigation("/admin/statistics")}
+          className="btn blue-btn"
+        >
+          Show Statistics
+        </button>
+      </div>
       <div className="container mt-4">
         {/* Staff Users Table */}
         <div className="container mt-4 user-section">
@@ -174,13 +197,10 @@ const ManageOrder = () => {
             </div>
           </div>
         </div>
-        <button onClick={fetchOldOrders} className="btn blue-btn">
-          Show Orders Older Than 6 Months
-        </button>
         {isOldOrdersModalOpen && oldOrders.length > 0 && (
-
           <div className="modal-overlay">
-            <div style={{ maxWidth: "800px" }}>
+            <div
+            >
               <div className="user-table mt-4">
                 <div
                   style={{
@@ -188,59 +208,67 @@ const ManageOrder = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <h3 className="header-title">
-                    Old Orders
-                  </h3>
+                  <h3 className="header-title">Old Orders</h3>
                   <FaTimes
                     className="close-icon"
                     style={{ cursor: "pointer", color: "red" }}
                     onClick={closeOldOrdersModal}
                   />
                 </div>
-                <table className="purchase-history-table">
-                  <thead>
-                    <tr>
-                      <th>Staff Name</th>
-                      <th>Date</th>
-                      <th>Items</th>
-                      <th>Total Amount ($)</th>
-                      <th>Payment Method</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {oldOrders.map((order) => (
-                      <tr key={order.id}>
-                        <td>{order.staffName}</td>
-                        <td>{new Date(order.date).toLocaleDateString('en-GB')}</td>
-                        <td>{order.items}</td>
-                        <td>${order.totalAmount.toFixed(2)}</td>
-                        <td>{order.paymentMethod}</td>
-                        <td>
-                          <button
-                            className="btn red-btn"
-                            onClick={() =>
-                              deleteOldOrder(order.id, order.staffId)
-                            }
-                            style={{
-                              backgroundColor: "#d9534f",
-                              color: "#fff",
-                              border: "none",
-                            }}
-                            onMouseEnter={(e) =>
-                              (e.target.style.backgroundColor = "#c9302c")
-                            }
-                            onMouseLeave={(e) =>
-                              (e.target.style.backgroundColor = "#d9534f")
-                            }
-                          >
-                            Delete
-                          </button>
-                        </td>
+                <div
+                  style={{
+                    overflowY: "auto", // Enable vertical scrolling
+                    maxHeight: "70vh", // Set max height of the scrollable area
+                    marginTop: "10px",
+                  }}
+                >
+                  <table className="purchase-history-table">
+                    <thead>
+                      <tr>
+                        <th>Staff Name</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total Amount ($)</th>
+                        <th>Payment Method</th>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {oldOrders.map((order) => (
+                        <tr key={order.id}>
+                          <td>{order.staffName}</td>
+                          <td>
+                            {new Date(order.date).toLocaleDateString("en-GB")}
+                          </td>
+                          <td>{order.items}</td>
+                          <td>${order.totalAmount.toFixed(2)}</td>
+                          <td>{order.paymentMethod}</td>
+                          <td>
+                            <button
+                              className="btn red-btn"
+                              onClick={() =>
+                                deleteOldOrder(order.id, order.staffId)
+                              }
+                              style={{
+                                backgroundColor: "#d9534f",
+                                color: "#fff",
+                                border: "none",
+                              }}
+                              onMouseEnter={(e) =>
+                                (e.target.style.backgroundColor = "#c9302c")
+                              }
+                              onMouseLeave={(e) =>
+                                (e.target.style.backgroundColor = "#d9534f")
+                              }
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
