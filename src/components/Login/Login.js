@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // default role
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simple credential check (replace with your authentication logic)
     if (username === 'admin' && password === 'admin' && role === 'admin') {
-      onLogin(true, 'admin'); // isAdmin = true, role = 'admin'
+      login('admin');
     } else if (username === 'staff' && password === 'staff' && role === 'staff') {
-      onLogin(false, 'staff'); // isAdmin = false, role = 'staff'
+      login('staff');
     } else if (username === 'student' && password === 'student' && role === 'student') {
-      onLogin(false, 'student'); // isAdmin = false, role = 'student'
+      login('student');
     } else {
       alert('Invalid credentials');
     }
   };
+
+  
 
   return (
     <div
@@ -28,7 +32,7 @@ const Login = ({ onLogin }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: `url('./image/banner.png')`, // Update the path to your image
+        backgroundImage: `url('../image/banner.png')`, // Update the path to your image
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
