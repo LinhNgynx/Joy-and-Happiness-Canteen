@@ -3,6 +3,7 @@ import AdminApp from './AdminApp';
 import Login from './components/Login/Login';
 import StaffApp from './StaffApp';
 import StudentApp from './StudentApp';
+import "./App.css";
 
 const App = () => {
   const [role, setRole] = useState(null);
