@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { foodList } from "../../db/foodList";
+import React, { useEffect, useState } from "react";
+import { foodList as initialfoodList } from "../../db/foodList";
 import "../css/Menu.css";
 
 const Menu = () => {
@@ -9,6 +9,9 @@ const Menu = () => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  const [foodList, setFoodList] = useState(initialfoodList);
+  const [expandedReviewIndex, setExpandedReviewIndex] = useState(null); // Track the expanded comment section
+  const [commentText, setCommentText] = useState("");
 
   const handleSearch = (e) => {
     setSearchText(e.target.value.toLowerCase());
@@ -71,10 +74,81 @@ const Menu = () => {
     setReviewText("");
   };
 
+  const handleLikeReview = (foodId, reviewIndex) => {
+    setFoodList((prevList) =>
+      prevList.map((food) => {
+        if (food.id === foodId) {
+          const updatedReviews = food.reviews.map((review, index) => {
+            if (index === reviewIndex) {
+              // Check mylike and update likes 
+              const newLikeCount = review.mylike ? review.likes - 1 : review.likes + 1;
+              return {
+                ...review,
+                likes: newLikeCount,
+                mylike: !review.mylike,
+              };
+            }
+            return review;
+          });
+          return { ...food, reviews: updatedReviews };
+        }
+        return food;
+      })
+    );
+  };
+
+  // update selectedFood after change foodList
+  useEffect(() => {
+    if (selectedFood) {
+      const updatedFood = foodList.find((food) => food.id === selectedFood.id);
+      setSelectedFood(updatedFood);
+    }
+  }, [foodList, selectedFood]);
+
+  const handleAddComment = (index) => {
+    setExpandedReviewIndex(index === expandedReviewIndex ? null : index);
+  };
+
+  const handleSendComment = (reviewIndex) => {
+    if (!commentText.trim()) return;
+
+    const newComment = {
+      username: "Current User",
+      comment: commentText,
+      timestamp: new Date().toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }),
+    };
+
+    const updatedFood = {
+      ...selectedFood,
+      reviews: selectedFood.reviews.map((review, index) =>
+        index === reviewIndex
+          ? { ...review, comments: [...(review.comments || []), newComment] }
+          : review
+      ),
+    };
+
+    setSelectedFood(updatedFood);
+
+    setFoodList((prevFoodList) =>
+      prevFoodList.map((food) =>
+        food.id === updatedFood.id ? updatedFood : food
+      )
+    );
+
+    setCommentText("");
+  };
+
   return (
     <div className="">
       <h2 style={{ textAlign: 'center' }}>Today Menu</h2>
-
       {/* Search, Filter, and Sort */}
       <div className="search-filter-sort">
         {/* Filter */}
@@ -172,6 +246,39 @@ const Menu = () => {
                       <div className="review-content">
                         <p>{review.review}</p>
                       </div>
+                      <div className="review-actions">
+                        <button className="cmt-btn"
+                          style={{ color: review.mylike ? "white" : "initial", backgroundColor: review.mylike ? "black" : "initial" }}
+                          onClick={() => handleLikeReview(selectedFood.id, index)}>
+                          <i className="fas fa-thumbs-up"> Like</i> {review.likes}
+                        </button>
+                        <button className="cmt-btn"
+                          style={{ color: expandedReviewIndex === index ? "white" : "initial", backgroundColor: expandedReviewIndex === index ? "black" : "initial" }}
+                          onClick={() => handleAddComment(index)}>
+                          <i className="fas fa-comment"> Comment</i>
+                        </button>
+                      </div>
+                      {/* Comments section */}
+                      {expandedReviewIndex === index && (
+                        <div className="comments-section">
+                          {review.comments?.map((comment, cIndex) => (
+                            <div className="row" key={cIndex}>
+                              <div className="col-3">
+                                <span><strong>{comment.username}</strong></span>
+                                <p>{comment.timestamp}</p>
+                              </div>
+                              <p className="col-9">{comment.comment}</p>
+                            </div>
+                          ))}
+                          <input
+                            type="text"
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                            placeholder="Write a comment..."
+                          />
+                          <button style={{ color: 'white', backgroundColor: 'black', marginLeft: '10px' }} onClick={() => handleSendComment(index)}><i className="fas">Send</i></button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))
